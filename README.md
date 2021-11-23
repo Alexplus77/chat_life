@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+Анонимный чат
+===
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Вам необходимо реализовать абсолютно анонимный чат (такого, конечн,о не бывает ☺), в который сможет отправлять сообщения любой желающий.
 
-## Available Scripts
+Но есть важное требование: если вы даже открыли другую вкладку в браузере (написание всё равно должно идти с вашего аккаунта).
 
-In the project directory, you can run:
+Backend вы можете взять готовый (из каталога `backend`).
 
-### `npm start`
+![Chat](src/assets/chat.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Общая механика
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+При создании компонента создаётся интервал или таймаут и делается периодический опрос сервера (временной интервал предложите сами) в виде http-запроса GET на адрес http://localhost:7777/messages?from={id}, где id - идентификатор последнего полученного сообщения (при первоначальной загрузке - 0).
 
-### `npm test`
+Формат присылаемых данных:
+```json
+[
+    {
+        "id": 1,
+        "userId": "5f2d9da0-f624-4309-a598-8ba35d6c4bb6",
+        "content": "Какая сейчас погода за окном?"
+    },
+    {
+        "id": 2,
+        "userId": "5f2d9da0-f624-4309-a598-8ba35d6c4bb6",
+        "content": "К сожалению, я не знаю ответа на этот вопрос"
+    },
+]
+```
+Где userId - уникальный идентификатор анонимного пользователя. Подумайте, как его сгенерировать и где хранить (если не придумали - прочитайте спойлеры).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Полученные данные отображаются в виде блоков с возможностью различным выравниванием:
+* ваши - справа
+* не ваши - слева
 
-### `npm run build`
+Ваши или не ваши вы определяете путём сравнения своего userId и того, что в сообщении.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Добавление:
+1. Вы заполняете форму и нажимаете кнопку "Добавить"
+1. Выполняется http-запрос POST на адрес http://localhost:7777/messages, в теле запроса передаётся следующий JSON:
+```json
+{
+    "id": 0,
+    "userId": "5f2d9da0-f624-4309-a598-8ba35d6c4bb6",
+    "content": "То, что было введно в поле ввода"
+}
+```
+3. После чего ждёте, пока не произойдёт получение данных по интервалу. Подумайте, как сделать ожидание комфортным для пользователя, и как решают эту проблему существующие чаты.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<details>
+  <summary>Спойлеры</summary>
+  
+  Добиться уникальности "анонимов" можно просто записав в local/sessionStorage случайно сгенерированный id (nanoid, uuid). И использовать его для отправки и получения данных.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  Подумайте, какие уязвимости в безопасности создаёт подобная схема, и возможна ли отправка сообщений от лица другого пользователя?
 
-### `npm run eject`
+  Подумайте над тем, как это можно предотвратить?
+</details>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Advanced
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Попробуйте раскрашивать сообщения от разных пользователей в разные цвета.
+1. Попробуйте реализовать авто-скроллинг до последнего сообщения.
