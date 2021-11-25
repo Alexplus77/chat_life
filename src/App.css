@@ -37,7 +37,7 @@ grid-template-rows: 15fr 1fr;
   grid-area: form;
 }
 .button{
-  width: 70px;
+  width: 75px;
   height: 32px;
   border-radius: 7px;
   background-color: rgba(15, 123, 245, 0.69);
@@ -48,11 +48,13 @@ grid-template-rows: 15fr 1fr;
   color: white;
 }
 .input{
-  width: 250px;
+  width: 200px;
   height: 33px;
 border-radius: 3px;
-
 }
 .fa{
   color: red;
+}
+.spinner-grow{
+  justify-self: center;
 }

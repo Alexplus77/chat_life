@@ -34,25 +34,27 @@ function App() {
         })
     }
     const handleRemove = (id) => {
+        setIsLoading(true)
         fetch(`/api?id=${id}`, {
             method: 'DELETE'
         }).then(response => response.json()).then(data => {
+            setIsLoading(false)
             setData(data)
         })
     }
-
     return (
+        <>
         <div className='container'>
-            <form onSubmit={handleSubmit} className='form'>
-                <input className='input' onChange={handleChange} value={value}/>
-                <button className='button' onSubmit={handleSubmit}>Ok</button>
-            </form>
-
             <div className='container-messages'>
                 {!data?.length ? "Сообщений пока нет" : data?.map((item) => <Message isLoading={isLoading} handleRemove={handleRemove} item={item}/>)}
                 { isLoading && <Loading/>}
             </div>
         </div>
+            <form onSubmit={handleSubmit} className='form'>
+                <input className='input' onChange={handleChange} value={value}/>
+                <button className='button' onSubmit={handleSubmit}>Ok</button>
+            </form>
+        </>
     );
 }
 
