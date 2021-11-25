@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import 'App.css';
 import {nanoid} from "nanoid";
-import cn from 'classnames'
+import Message from "./components/Message";
 
 function App() {
     const [data, setData] = useState(null)
@@ -50,12 +50,7 @@ function App() {
             {/** Нужно реализовать иконку загрузки **/}
             {!data && 'Loading...'}
             <div className='container-messages'>
-                {!data?.length ? "Сообщений пока нет" : data?.map(({message, id, userId}) => <div
-                    className={cn('message my-message', {'message anonymous-message': userId !== localStorage.getItem('userId')})}
-                    key={id}>{message}{' '}
-                    <i onClick={() => handleRemove(id)} className="fa fa-times" aria-hidden="true"></i></div>)
-
-                }
+                {!data?.length ? "Сообщений пока нет" : data?.map((item) => <Message handleRemove={handleRemove} item={item}/>)}
             </div>
         </div>
     );
