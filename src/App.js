@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import 'App.css';
 import {nanoid} from "nanoid";
 import Message from "./components/Message";
-
+import Loading from "./components/Loading";
 function App() {
     const [data, setData] = useState(null)
     const [value, setValue] = useState('')
@@ -44,13 +44,13 @@ function App() {
     return (
         <div className='container'>
             <form onSubmit={handleSubmit} className='form'>
-                <input onChange={handleChange} value={value}/>
-                <button onSubmit={handleSubmit}>Ok</button>
+                <input className='input' onChange={handleChange} value={value}/>
+                <button className='button' onSubmit={handleSubmit}>Ok</button>
             </form>
-            {/** Нужно реализовать иконку загрузки **/}
-            {!data && 'Loading...'}
+
             <div className='container-messages'>
-                {!data?.length ? "Сообщений пока нет" : data?.map((item) => <Message handleRemove={handleRemove} item={item}/>)}
+                {!data?.length ? "Сообщений пока нет" : data?.map((item) => <Message isLoading={isLoading} handleRemove={handleRemove} item={item}/>)}
+                { isLoading && <Loading/>}
             </div>
         </div>
     );

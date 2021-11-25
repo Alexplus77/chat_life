@@ -5,7 +5,7 @@ body{
 }
 .container{
   display: grid;
-  width: 300px;
+  width: 250px;
   height: 70vh;
   border: #282c34 2px solid;
   border-radius: 7px;
@@ -16,7 +16,6 @@ grid-template-rows: 15fr 1fr;
   grid-area: messages-container;
   display: grid;
   grid-auto-flow: row;
-  padding: 10px;
 }
 .message{
   border: #616566 1px solid;
@@ -37,21 +36,22 @@ grid-template-rows: 15fr 1fr;
 .form{
   grid-area: form;
 }
-button{
+.button{
   width: 70px;
   height: 32px;
   border-radius: 7px;
   background-color: rgba(15, 123, 245, 0.69);
   cursor: pointer;
 }
-button:hover{
+.button:hover{
   background-color: rgba(0, 0, 100, 0.8);
   color: white;
 }
-input{
-  width: 222px;
-  height: 25px;
+.input{
+  width: 250px;
+  height: 33px;
 border-radius: 3px;
+
 }
 .fa{
   color: red;
