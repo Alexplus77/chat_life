@@ -15,7 +15,9 @@ useEffect(()=>{
 },[])
 
     useEffect(() => {
+        setIsLoading(true)
         fetch('http://localhost:8080/messages').then(response => response.json()).then(data => {
+            setIsLoading(false)
             setData(data)
         })
 

@@ -15,9 +15,11 @@ grid-template-rows: 15fr 1fr;
 .container-messages{
   grid-area: messages-container;
   display: grid;
+  overflow: auto;
   grid-auto-flow: row;
 }
 .message{
+  overflow: hidden;
   border: #616566 1px solid;
   width: 100px;
   height: 40px;
