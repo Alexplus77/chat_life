@@ -3,25 +3,30 @@ import 'App.css';
 import {nanoid} from "nanoid";
 import Message from "./components/Message";
 import Loading from "./components/Loading";
+
 function App() {
     const [data, setData] = useState(null)
     const [value, setValue] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [isResponse, setIsResponse]=useState(false)
+
+useEffect(()=>{
+    localStorage.setItem('userId', nanoid())
+},[])
 
     useEffect(() => {
-        localStorage.setItem('userId', nanoid())
-        setIsLoading(true)
-        fetch('/api').then(response => response.json()).then(data => {
-            setIsLoading(false)
+        fetch('http://localhost:8080/messages').then(response => response.json()).then(data => {
             setData(data)
         })
-    }, [])
+
+    },[isResponse])
 
     const handleChange = (e) => setValue(e.target.value)
     const handleSubmit = (e) => {
         e.preventDefault()
+        setIsResponse(!isResponse)
         setIsLoading(true)
-        fetch('/api', {
+        fetch('http://localhost:8080/messages', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -29,24 +34,25 @@ function App() {
             body: JSON.stringify({message: value, userId: localStorage.getItem('userId')})
         }).then(response => response.json()).then(data => {
             setIsLoading(false)
-            setData(data)
             setValue('')
         })
     }
+
     const handleRemove = (id) => {
-        setIsLoading(true)
-        fetch(`/api?id=${id}`, {
+        setIsResponse(!isResponse)
+setIsLoading(true)
+        fetch(`http://localhost:8080/messages/${id}`, {
             method: 'DELETE'
         }).then(response => response.json()).then(data => {
-            setIsLoading(false)
-            setData(data)
+setIsLoading(false)
         })
     }
     return (
         <>
         <div className='container'>
             <div className='container-messages'>
-                {!data?.length ? "Сообщений пока нет" : data?.map((item) => <Message isLoading={isLoading} handleRemove={handleRemove} item={item}/>)}
+                {!data?.length && "Сообщений пока нет"}
+                { data?.map((item) => <Message key={nanoid()} isLoading={isLoading} handleRemove={handleRemove} item={item}/>)}
                 { isLoading && <Loading/>}
             </div>
         </div>
